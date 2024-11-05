@@ -1,0 +1,22 @@
+def ext_bottom_rod_cut(p, n):
+    mem, sol = {}, {}
+    mem[0] = 0
+
+    for j in range(1, n + 1):
+        q = -float('inf')
+        for i in range(1, j + 1):
+            if q < p[i] + mem[j - i]:
+                q = p[i] + mem[j - i]
+                sol[j] = i
+        mem[j] = q
+
+    return (mem, sol)
+
+def print_sol(p, n):
+    (mem, sol) = ext_bottom_rod_cut(p, n)
+
+    print("Maximum Revenue for each length:", mem)
+    print("Optimal cuts for rod of length", n, ":", end=" ")
+    while n > 0:
+        print(sol[n], end=" ")
+        n -= sol[n]

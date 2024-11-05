@@ -1,0 +1,15 @@
+def nth_fib_num_aux(n, mem):
+    if mem[n] != -float('inf'):
+        return mem[n]
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        fib = nth_fib_num_aux(n - 1, mem) + nth_fib_num_aux(n - 2, mem)
+        mem[n] = fib
+        return fib
+
+def nth_fib_num(n):
+    mem = {i: -float('inf') for i in range(n + 1)}
+    return nth_fib_num_aux(n, mem)

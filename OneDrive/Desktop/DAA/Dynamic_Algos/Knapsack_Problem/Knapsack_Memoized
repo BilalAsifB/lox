@@ -1,0 +1,37 @@
+def mem_knap_sack_aux(v, w, n, capacity, sack, keep):
+    if sack[n][capacity] != -float('inf'):
+        return sack[n][capacity]
+    
+    if n == 0 or capacity == 0:
+        q = 0
+        keep[n][capacity] = 0
+    else:
+        q = -float('inf')
+
+        if w[n - 1] <= capacity:
+            q = max(q, v[n - 1] + mem_knap_sack_aux(v, w, n - 1, capacity - w[n - 1], sack, keep))
+            keep[n][capacity] = 1
+        else:
+            q = mem_knap_sack_aux(v, w, n - 1, capacity, sack, keep)
+            keep[n][capacity] = 0
+        
+        sack[n][capacity] = q
+    
+    return q
+
+def mem_knap_sack(v, w, n, capacity):
+    sack = {i: {} for i in range(n + 1)}
+    keep = {i: {} for i in range(n + 1)}
+
+    for i in range(n + 1):
+        for j in range(capacity + 1):
+            sack[i][j] = -float('inf')
+
+    return mem_knap_sack_aux(v, w, n, capacity, sack, keep), keep
+
+def print_optimal_solution(w, n, capacity, keep):
+    while n > 0:
+        if keep[n][capacity] == 1:
+            print(n,  end=" ")
+            capacity -= w[n - 1]
+        n -= 1

@@ -1,0 +1,27 @@
+def ext_mem_rod_cut_aux(p, n, mem, sol):
+    if mem[n] > 0:
+        return mem[n]
+    if n == 0:
+        q = 0
+    else:
+        q = -float('inf')
+        for i in range(1, n + 1):
+            temp = ext_mem_rod_cut_aux(p, n - i, mem, sol)
+            if q < p[i] + temp:
+                q = p[i] + temp
+                sol[n] = i
+        
+    mem[n] = q
+    return q
+
+def ext_mem_rod_cut(p, n):
+    mem = {i: -float('inf') for i in range(n + 1)}
+    sol = {}
+
+    max_revenue = ext_mem_rod_cut_aux(p, n, mem, sol)
+    
+    print("Maximum Revenue:", max_revenue)
+    print("Optimal cuts:", end=" ")
+    while n > 0:
+        print(sol[n], end=" ")
+        n -= sol[n]

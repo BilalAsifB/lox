@@ -1,0 +1,39 @@
+def lcs_len_bottom(x, y, m, n):
+    # Initialize tables with dimensions (m+1) x (n+1)
+    c = {i: {j: 0 for j in range(n + 1)} for i in range(m + 1)}
+    sol = {i: {j: '' for j in range(n + 1)} for i in range(m + 1)}
+
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if x[i - 1] == y[j - 1]:  # Compare x[i-1] with y[j-1]
+                c[i][j] = c[i - 1][j - 1] + 1
+                sol[i][j] = 'TOP LEFT'
+            elif c[i - 1][j] >= c[i][j - 1]:
+                c[i][j] = c[i - 1][j]
+                sol[i][j] = 'UP'
+            else:
+                c[i][j] = c[i][j - 1]
+                sol[i][j] = 'LEFT'
+    
+    return c, sol
+
+def print_lcs(sol, x, i, j):
+    if i == 0 or j == 0:
+        return
+    if sol[i][j] == 'TOP LEFT':
+        print_lcs(sol, x, i - 1, j - 1)
+        print(x[i - 1])  # Print x[i-1] as the current character
+    elif sol[i][j] == 'UP':
+        print_lcs(sol, x, i - 1, j)
+    else:
+        print_lcs(sol, x, i, j - 1)
+
+if __name__ == "__main__":
+    x = "AGGTAB"
+    y = "GXTXAYB"
+    m = len(x)
+    n = len(y)
+    c, sol = lcs_len_bottom(x, y, m, n)
+    print("LCS length:", c[m][n])
+    print("LCS sequence:")
+    print_lcs(sol, x, m, n)

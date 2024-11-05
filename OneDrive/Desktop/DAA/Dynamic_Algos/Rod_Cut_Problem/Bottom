@@ -1,0 +1,14 @@
+def bottom_rod_cut(p, n):
+    mem = {}
+    mem[0] = 0
+
+    if n == 0:
+        return 0
+    
+    for j in range(1,  n + 1):
+        q = -float('inf')
+        for i in range(1, j + 1):
+            q = max(q, p[i] + mem[j - i])
+        mem[j] = q
+
+    return mem[n]
